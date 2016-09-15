@@ -17,7 +17,9 @@
     "morgan": "~1.5.1",
     "passport": "^0.2.2",
     "passport-local": "^1.0.0",
-    "serve-favicon": "~2.2.0"
+    "serve-favicon": "~2.2.0",
+    "cloudant": "1.4.x",
+    "oop-module@0.0.5"
   },
   "devDependencies": {
     "gulp": "^3.9.0",

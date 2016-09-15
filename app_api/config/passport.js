@@ -1,15 +1,16 @@
 var passport = require('passport');
 var LocalStrategy = require('passport-local').Strategy;
-var dbname = config.cloudant.dbname;
 var config = require('./config.js');
+var dbname = config.cloudant.dbname;
+
 
 var Cloudant = require('cloudant')({account:config.cloudant.account, password:config.cloudant.password});
-var oop = require('module-oop');
-var User = oop.class('../models/user.js');
+var oop = require('oop-module');
+var User = oop.class('../models/User.js');
 
 
 passport.use('local-login',new LocalStrategy({
-    //usernameField: 'email'
+    usernameField: 'email'
   },
        function(username, password, done) {
           
@@ -27,8 +28,10 @@ passport.use('local-login',new LocalStrategy({
 
                 // user was found, now determine if password matches
                 var user = result.docs[0];
+                var u = new User(user.email, user._id, user.password);
+                console.log("in local-login"+ user._id);
                 //crypto
-                if (User.validPassword(user.hash,user.salt,user.password)) {
+                if (u.validPassword(password,user.salt,user.password)) {
                     console.log("Password matches");
           
                     // If credentials are correct, return the user object
@@ -43,11 +46,13 @@ passport.use('local-login',new LocalStrategy({
         ));
 
 passport.use('local-signup', new LocalStrategy({
+    usernameField: 'email'
             //passReqToCallback : true // allows us to pass back the entire request to the callback
         },
          function(username , password, done) {
-            
-
+             console.log("in local-signup");
+            // var body = req.body;
+            //onsole.log(body)
            // Use Cloudant query to find the user just based on user name
             var db = Cloudant.use(dbname);
             db.find({selector:{username:username}}, function(err, result) {
@@ -64,15 +69,15 @@ passport.use('local-signup', new LocalStrategy({
                 var user = new User();
 
                 //setter todo
-                user.email = username;
+                //user.email = username;
                 //save salt and hash
                 user.setSalt();
 
                 //hash
                 user.setPassword(user.salt,password);
              
-                var user = { username:username, password: user.password, salt: user.salt };
-                console.log("Register User: " + user);
+                var user = { username:username, password: user.password, salt: user.salt, };
+                console.log("Register User: " + user.username);
                 db.insert(user, function(err, body) {
                     if (err){
                         console.log("There was an error registering the user: " + err);

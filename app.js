@@ -14,8 +14,7 @@ var bodyParser = require('body-parser');
 // [SH] Require Passport
 var passport = require('passport');
 
-// [SH] Bring in the data model
-require('./app_api/models/db');
+
 // [SH] Bring in the Passport config after model is defined
 require('./app_api/config/passport');
 
@@ -92,17 +91,19 @@ app.use(function(err, req, res, next) {
     });
 });
 
-
+ http = require('http')
 var server = http.createServer(app).listen(config.port, function () {
     console.log('Express server listening on port : '+server.address().port);
 });
 
+var  db = require('./app_api/config/db.js');
 // test the cloudant connection
 var Cloudant = require('cloudant')({account:config.cloudant.account, password:config.cloudant.password});
 Cloudant.ping(function(er, reply) {
     if (er)
         return console.log('Failed to ping Cloudant. Did the network just go down?');
     else
+        db.initialize();
         return console.log('Cloudant connection was successful');
 });
 

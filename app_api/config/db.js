@@ -14,7 +14,7 @@ exports.initialize = function(req,res){
         var admin_pass = config.admin_pass;
         var index_field = config.index_field;
         var salt = crypto.randomBytes(16).toString('hex');
-        var hash_pass = crypto.pbkdf2Sync(password, salt, 1000, 64).toString('hex');
+        var hash_pass = crypto.pbkdf2Sync(admin_pass, salt, 1000, 64).toString('hex');
 
         var errstr = '';
         
@@ -38,21 +38,23 @@ exports.initialize = function(req,res){
                             userdb.index(username_idx, function(err, body) {
                                 if (!err) {
                                     console.log("Index " +index_field+ " was created!");
-                                    res.json({ dbname:dbname, admin_user:admin_user, admin_pass:admin_pass, index_field:index_field });
+                                    console.log("db init finished");
+                                    //res.json({ dbname:dbname, admin_user:admin_user, admin_pass:admin_pass, index_field:index_field });
                                 } else {
                                     console.log(err.reason);
-                                    errstr += err.reason;
-                                    res.status(500).send(errstr);
+                                    //errstr += err.reason;
+                                    //res.status(500).send(errstr);
                                 }
                             });
                         } else {
                             console.log(err.reason);
-                            errstr += err.reason;
-                            res.status(500).send(errstr);
+                            //errstr += err.reason;
+                           // res.status(500).send(errstr);
                         }
                     });
                 } else {
-                    res.status(500).send(err.reason);
+                    console.log(err.reason);
+                    //res.status(500).send(err.reason);
                 }
             });
         }); 

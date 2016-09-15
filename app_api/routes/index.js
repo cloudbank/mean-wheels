@@ -1,17 +1,17 @@
 var express = require('express');
 var router = express.Router();
 var jwt = require('express-jwt');
-var api = require('./api.js')
+var config = require('../config/config.js');
+
+
 var auth = jwt({
-  secret: 'MY_SECRET',
+  secret: config.jwtSecret,
   userProperty: 'payload'
 });
 
 var ctrlProfile = require('../controllers/profile');
 var ctrlAuth = require('../controllers/authentication');
 
-//recreate db
-router.get('/setup',api.initialize());
 
 // profile
 router.get('/profile', auth, ctrlProfile.profileRead);
