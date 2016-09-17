@@ -6,6 +6,8 @@
  */
 
 var express = require('express');
+
+
 var path = require('path');
 var favicon = require('serve-favicon');
 var logger = require('morgan');
@@ -13,6 +15,7 @@ var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 // [SH] Require Passport
 var passport = require('passport');
+
 
 
 // [SH] Bring in the Passport config after model is defined
@@ -24,6 +27,9 @@ var config = require('./app_api/config/config.js');
 var routesApi = require('./app_api/routes/index');
 
 var app = express();
+
+
+
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
@@ -64,6 +70,7 @@ app.use(function(req, res, next) {
 // [SH] Catch unauthorised errors
 app.use(function (err, req, res, next) {
   if (err.name === 'UnauthorizedError') {
+      
     res.status(401);
     res.json({"message" : err.name + ": " + err.message});
   }
@@ -97,13 +104,16 @@ var server = http.createServer(app).listen(config.port, function () {
 });
 
 var  db = require('./app_api/config/db.js');
+var init = false;
 // test the cloudant connection
 var Cloudant = require('cloudant')({account:config.cloudant.account, password:config.cloudant.password});
 Cloudant.ping(function(er, reply) {
     if (er)
         return console.log('Failed to ping Cloudant. Did the network just go down?');
     else
-        db.initialize();
+        if (init)  {
+             db.initialize();
+        }
         return console.log('Cloudant connection was successful');
 });
 

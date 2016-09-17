@@ -24,6 +24,15 @@
         controller: 'profileCtrl',
         controllerAs: 'vm'
       })
+      .when('/pwdReset', {
+        templateUrl: '/pwd/pwdReset.view.html',
+        controller: 'pwdCtrl',
+        controllerAs: 'vm'
+      })
+      .when('/logout', {
+        emplateUrl: '/auth/login/login.view.html',
+        controller: 'logoutCtrl',
+      })
       .otherwise({redirectTo: '/'});
 
     // use the HTML5 History API

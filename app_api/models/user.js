@@ -17,8 +17,9 @@ var step = 0;
 
 
 var salt = '';
-
-
+var refreshToken = "";
+var revoked = false;
+var confirmed = false;
 
 exports.constructor = function() {
    
@@ -47,8 +48,16 @@ exports.validPassword = function(password, salt,hashpwd) {
 }
 
 exports.generateJwt = function(email) {
-    var expiry = new Date();
-    expiry.setDate(expiry.getDate() + 7);
-    return  jwt.sign({ email: email, name: email   }, config.jwtSecret, { expiresIn: "1d" });
+    
+    return  jwt.sign({ email: email, name: email   }, config.jwtSecret, { expiresIn: "1s" });
     // DO NOT KEEP YOUR SECRET IN THE CODE!
+}
+
+exports.setRevoked = function(revoked) {
+  this.revoked = revoked;
+}
+
+exports.setRefreshToken = function(email) {
+ this.refreshToken =  email.toString() + '.' + crypto.randomBytes(
+      40).toString('hex');
 }
