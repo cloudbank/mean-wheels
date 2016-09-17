@@ -26,10 +26,7 @@ var auth = jwt({
 
 });  
 
-var auth2 = {
 
-
-}
  
 
 //router.get('/logout');
@@ -38,9 +35,12 @@ var auth2 = {
 var ctrlProfile = require('../controllers/profile');
 var ctrlAuth = require('../controllers/authentication');
 
-router.post('/confirmAccount',ctrlAuth.confirmAccount)
 
-router.post('/resetPwd',ctrlAuth.resetPwd)
+
+//pwd management and activation
+router.post('/confirmAccount',ctrlAuth.confirmAccount);
+router.post('/resetPwd', auth, ctrlAuth.resetPwd);
+router.post('/revoke', auth, ctrlAuth.revoke);
 
 // authentication
 router.post('/register', ctrlAuth.register);

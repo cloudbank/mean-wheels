@@ -71,10 +71,10 @@ passport.use('local-login', new LocalStrategy({
     })
 }));
 passport.use('local-signup', new LocalStrategy({
-    usernameField: 'email'
-        //passReqToCallback : true // allows us to pass back the entire request to the callback
-}, function(username, password, done) {
-    console.log("in local-signup");
+    usernameField: 'email',
+        passReqToCallback : true // allows us to pass back the entire request to the callback
+}, function(req,username, password, done) {
+    console.log("in local-signup" + req.type);
     // var body = req.body;
     //onsole.log(body)
     // Use Cloudant query to find the user just based on user name
@@ -121,7 +121,8 @@ passport.use('local-signup', new LocalStrategy({
             wcUser: true,
             wcWidth: 0,
             step: 0,
-            confirmed : false
+            confirmed : false,
+            device: req.type
         };
         console.log("Register User: " + user.username);
         db.insert(user, function(err, body) {

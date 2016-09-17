@@ -49,7 +49,7 @@ exports.validPassword = function(password, salt,hashpwd) {
 
 exports.generateJwt = function(email) {
     
-    return  jwt.sign({ email: email, name: email   }, config.jwtSecret, { expiresIn: "1s" });
+    return  jwt.sign({ email: email, name: email   }, config.jwtSecret, { expiresIn: "1d" });
     // DO NOT KEEP YOUR SECRET IN THE CODE!
 }
 
